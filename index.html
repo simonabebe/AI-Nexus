@@ -1,0 +1,1094 @@
+<script>
+        // Add active class to current section in vertical nav
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('section');
+                            const navLinks = document.querySelectorAll('.horizontal-nav-link');
+            
+            window.addEventListener('scroll', function() {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if(pageYOffset >= (sectionTop - 300)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if(link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Nexus - Advanced AI Knowledge Hub</title>
+    <style>
+        :root {
+            --primary: #4a00e0;
+            --secondary: #8e2de2;
+            --dark: #121212;
+            --light: #f8f9fa;
+            --accent: #00f2fe;
+            --text: #e1e1e1;
+            --text-dark: #121212;
+            --card-bg: rgba(18, 18, 24, 0.8);
+            --card-border: rgba(255, 255, 255, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        .gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(125deg, #121212 0%, #1e1e30 100%);
+            z-index: -2;
+            overflow: hidden;
+        }
+        
+        .gradient-bg::before {
+            content: "";
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            opacity: 0.05;
+            top: -30%;
+            right: -30%;
+        }
+        
+        .gradient-bg::after {
+            content: "";
+            position: absolute;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+            opacity: 0.05;
+            bottom: -20%;
+            left: -20%;
+        }
+        
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(var(--card-border) 1px, transparent 1px),
+                              linear-gradient(to right, var(--card-border) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        header {
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(10px);
+            background: rgba(18, 18, 24, 0.8);
+            z-index: 100;
+            border-bottom: 1px solid var(--card-border);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+        
+        .nav-links a, .nav-links .dropdown-toggle {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .nav-links a::after, .nav-links .dropdown-toggle::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover, .nav-links .dropdown-toggle:hover {
+            color: var(--accent);
+        }
+        
+        .nav-links a:hover::after, .nav-links .dropdown-toggle:hover::after {
+            width: 100%;
+        }
+        
+        /* Horizontal Navigation */
+        .horizontal-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 0;
+            backdrop-filter: blur(10px);
+            background: rgba(18, 18, 24, 0.95);
+            z-index: 101; /* Higher than header */
+            border-bottom: 1px solid var(--card-border);
+        }
+        
+        /* Adjust header to appear below the fixed nav */
+        header {
+            margin-top: 60px;
+        }
+        
+        .horizontal-nav-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .horizontal-nav-link {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .horizontal-nav-link:hover {
+            color: var(--accent);
+            background: rgba(74, 0, 224, 0.1);
+        }
+        
+        .horizontal-nav-link.active {
+            color: var(--accent);
+            background: rgba(74, 0, 224, 0.15);
+            border-bottom: 2px solid var(--accent);
+        }
+        
+        .hero {
+            min-height: calc(100vh - 140px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+            padding: 4rem 0;
+            margin-top: 60px; /* Add space for fixed horizontal nav */
+        }
+        
+        .hero-content {
+            max-width: 800px;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, #ffffff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: #b3b3b3;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            box-shadow: 0 4px 20px rgba(142, 45, 226, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(142, 45, 226, 0.5);
+        }
+        
+        .btn-secondary {
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            background: transparent;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(0, 242, 254, 0.1);
+        }
+        
+        section {
+            padding: 5rem 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            border-radius: 2px;
+        }
+        
+        .section-description {
+            font-size: 1.1rem;
+            color: #b3b3b3;
+            margin-bottom: 3rem;
+            max-width: 700px;
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-color: rgba(74, 0, 224, 0.3);
+        }
+        
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .card-content {
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+        
+        .card-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s ease;
+            margin-top: auto;
+        }
+        
+        .card-link:hover {
+            gap: 0.8rem;
+        }
+        
+        .card-link::after {
+            content: "→";
+            transition: transform 0.3s ease;
+        }
+        
+        .card-link:hover::after {
+            transform: translateX(3px);
+        }
+        
+        .tag {
+            background: rgba(74, 0, 224, 0.2);
+            color: var(--accent);
+            padding: 0.3rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid rgba(74, 0, 224, 0.3);
+        }
+        
+        .blog-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .blog-img {
+            height: 180px;
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            position: relative;
+            background-color: #1e1e30;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 3rem;
+            font-weight: 300;
+        }
+        
+        .date {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+        
+        .project-card {
+            height: 100%;
+        }
+        
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .team-card {
+            text-align: center;
+        }
+        
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .avatar::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(74, 0, 224, 0.5), rgba(142, 45, 226, 0.5));
+        }
+        
+        .team-name {
+            font-size: 1.3rem;
+            color: white;
+            margin-bottom: 0.3rem;
+        }
+        
+        .team-title {
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .resources-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .resources-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: rgba(74, 0, 224, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.2rem;
+            font-size: 1.5rem;
+            color: var(--accent);
+            border: 1px solid rgba(74, 0, 224, 0.3);
+        }
+        
+        .resources-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        
+        .resources-list li {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .resources-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+        
+        .contact-form {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            border-radius: 4px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        footer {
+            padding: 3rem 0;
+            background: rgba(18, 18, 24, 0.8);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--card-border);
+        }
+        
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-text {
+            max-width: 300px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-links h4 {
+            font-size: 1.1rem;
+            color: white;
+            margin-bottom: 1.2rem;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #b3b3b3;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--card-border);
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .team-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .footer-container {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            /* Mobile dropdown menu */
+            .nav-links .dropdown-menu {
+                position: static;
+                opacity: 1;
+                pointer-events: auto;
+                transform: none;
+                box-shadow: none;
+                padding: 0;
+                border: none;
+                margin-left: 1rem;
+                background: transparent;
+            }
+            
+            .nav-links .dropdown-menu a {
+                padding: 0.5rem 0;
+            }
+            
+            .nav-links .dropdown-toggle::after {
+                display: none;
+            }
+            
+            /* Mobile responsive adjustments */
+            .horizontal-nav-container {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 0 1rem;
+            }
+            
+            .horizontal-nav-link {
+                font-size: 0.9rem;
+                padding: 0.4rem 0.7rem;
+                margin: 0.2rem;
+            }
+            
+            /* Adjust header position */
+            header {
+                margin-top: 80px; /* More space for horizontal nav on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-bg"></div>
+    <div class="grid-overlay"></div>
+    
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">AI Nexus</div>
+                <div class="nav-links">
+                    <a href="#latest-articles">Latest Articles</a>
+                    <a href="#ai-projects">Our AI Projects</a>
+                    <a href="#learning-paths">Learning Paths</a>
+                    <a href="#useful-resources">Useful Resources</a>
+                    <a href="#team">Our Team</a>
+                    <a href="#contact">Get In Touch</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Horizontal Navigation Bar -->
+    <div class="horizontal-nav">
+        <div class="container">
+            <div class="horizontal-nav-container">
+                <a href="#latest-articles" class="horizontal-nav-link active">Latest Articles</a>
+                <a href="#ai-projects" class="horizontal-nav-link">Our AI Projects</a>
+                <a href="#learning-paths" class="horizontal-nav-link">Learning Paths</a>
+                <a href="#useful-resources" class="horizontal-nav-link">Useful Resources</a>
+                <a href="#team" class="horizontal-nav-link">Our Team</a>
+                <a href="#contact" class="horizontal-nav-link">Get In Touch</a>
+            </div>
+        </div>
+    </div>
+    
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Exploring the Future of AI Innovation</h1>
+                <p class="subtitle">Sharing insights, projects, and resources at the intersection of artificial intelligence and technological advancement.</p>
+                <div class="cta-buttons">
+                    <a href="#latest-articles" class="btn btn-primary">Read Our Blog</a>
+                    <a href="#ai-projects" class="btn btn-secondary">Explore Projects</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="latest-articles">
+        <div class="container">
+            <h2 class="section-title">Latest Articles</h2>
+            <p class="section-description">Dive into our latest thoughts, discoveries, and tutorials on artificial intelligence, machine learning, and emerging technologies.</p>
+            
+            <div class="card-grid">
+                <div class="card blog-card">
+                    <div class="blog-img">AI</div>
+                    <span class="date">March 12, 2025</span>
+                    <h3 class="card-title">The Evolution of Large Language Models</h3>
+                    <div class="card-content">
+                        <div class="tags">
+                            <span class="tag">LLMs</span>
+                            <span class="tag">Research</span>
+                        </div>
+                        <p>Exploring the rapid advancement of Large Language Models from GPT to today's multimodal systems and their impact on various industries.</p>
+                    </div>
+                    <a href="#" class="card-link">Read Article</a>
+                </div>
+                
+                <div class="card blog-card">
+                    <div class="blog-img">ML</div>
+                    <span class="date">March 5, 2025</span>
+                    <h3 class="card-title">Explainable AI: Breaking the Black Box</h3>
+                    <div class="card-content">
+                        <div class="tags">
+                            <span class="tag">XAI</span>
+                            <span class="tag">Ethics</span>
+                        </div>
+                        <p>Why explainability matters in AI systems and how researchers are working to make complex models more transparent and interpretable.</p>
+                    </div>
+                    <a href="#" class="card-link">Read Article</a>
+                </div>
+                
+                <div class="card blog-card">
+                    <div class="blog-img">DL</div>
+                    <span class="date">February 27, 2025</span>
+                    <h3 class="card-title">Deep Learning for Computer Vision: Beyond CNNs</h3>
+                    <div class="card-content">
+                        <div class="tags">
+                            <span class="tag">Vision</span>
+                            <span class="tag">Neural Networks</span>
+                        </div>
+                        <p>Examining the latest architectures and approaches that are pushing the boundaries of what's possible in computer vision applications.</p>
+                    </div>
+                    <a href="#" class="card-link">Read Article</a>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="#" class="btn btn-secondary">View All Articles</a>
+            </div>
+        </div>
+    </section>
+    
+    <section id="ai-projects">
+        <div class="container">
+            <h2 class="section-title">Our AI Projects</h2>
+            <p class="section-description">Practical AI implementations, open-source tools, and research projects we've developed to address real-world problems.</p>
+            
+            <div class="card-grid">
+                <div class="card project-card">
+                    <h3 class="card-title">NeuraSense</h3>
+                    <div class="card-content">
+                        <div class="tags">
+                            <span class="tag">NLP</span>
+                            <span class="tag">Sentiment Analysis</span>
+                        </div>
+                        <p>An advanced sentiment analysis tool that goes beyond basic polarity detection to understand complex emotional contexts in text.</p>
+                        <p>Built with PyTorch and transformer-based architectures to achieve state-of-the-art accuracy on benchmark datasets.</p>
+                        <div class="project-links">
+                            <a href="#" class="card-link">View Demo</a>
+                            <a href="#" class="card-link">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card project-card">
+                    <h3 class="card-title">VisionForge</h3>
+                    <div class="card-content">
+                        <div class="tags">
+                            <span class="tag">Computer Vision</span>
+                            <span class="tag">Object Detection</span>
+                        </div>
+                        <p>A lightweight object detection framework optimized for edge devices and real-time processing with minimal computational resources.</p>
+                        <p>Includes pre-trained models and easy adaptation protocols for custom datasets with minimal examples.</p>
+                        <div class="project-links">
+                            <a href="#" class="card-link">Documentation</a>
+                            <a href="#" class="card-link">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card project-card">
+                    <h3 class="card-title">AutoML Platform</h3>
+                    <div class="card-content">
+                        <div class="tags">
+                            <span class="tag">AutoML</span>
+                            <span class="tag">Model Optimization</span>
+                        </div>
+                        <p>An end-to-end platform for automated machine learning pipeline creation, hyperparameter tuning, and deployment.</p>
+                        <p>Reduces the barrier to entry for ML adoption in organizations without requiring deep technical expertise.</p>
+                        <div class="project-links">
+                            <a href="#" class="card-link">Try It Now</a>
+                            <a href="#" class="card-link">Documentation</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="learning-paths">
+        <div class="container">
+            <h2 class="section-title">Learning Paths</h2>
+            <p class="section-description">Curated paths and resources to help you navigate the complex world of artificial intelligence and machine learning.</p>
+            
+            <div class="card-grid">
+                <div class="card resources-card">
+                    <div class="resources-icon">🧠</div>
+                    <h3 class="card-title">Foundations of AI</h3>
+                    <div class="card-content">
+                        <p>Essential concepts and frameworks to build a solid understanding of artificial intelligence fundamentals.</p>
+                        <ul class="resources-list">
+                            <li>Introduction to AI algorithms and approaches</li>
+                            <li>Understanding neural networks and deep learning</li>
+                            <li>Probability and statistics for machine learning</li>
+                            <li>Ethics and responsibility in AI development</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="card-link">Explore Path</a>
+                </div>
+                
+                <div class="card resources-card">
+                    <div class="resources-icon">💻</div>
+                    <h3 class="card-title">Practical ML Engineering</h3>
+                    <div class="card-content">
+                        <p>Hands-on resources for implementing and deploying machine learning systems in production environments.</p>
+                        <ul class="resources-list">
+                            <li>Building scalable ML pipelines</li>
+                            <li>Model serving and deployment strategies</li>
+                            <li>Monitoring and maintenance of AI systems</li>
+                            <li>MLOps best practices and tools</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="card-link">Explore Path</a>
+                </div>
+                
+                <div class="card resources-card">
+                    <div class="resources-icon">🔍</div>
+                    <h3 class="card-title">Specialized Domains</h3>
+                    <div class="card-content">
+                        <p>Deep dives into specific AI application areas and specialized techniques for domain-specific problems.</p>
+                        <ul class="resources-list">
+                            <li>Natural Language Processing techniques</li>
+                            <li>Computer Vision and image processing</li>
+                            <li>Reinforcement Learning fundamentals</li>
+                            <li>Generative AI and creative applications</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="card-link">Explore Path</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="useful-resources">
+        <div class="container">
+            <h2 class="section-title">Useful Resources</h2>
+            <p class="section-description">A curated collection of valuable tools, frameworks, and educational materials to support your AI journey.</p>
+            
+            <div class="card-grid">
+                <div class="card resources-card">
+                    <div class="resources-icon">📚</div>
+                    <h3 class="card-title">Essential AI Libraries</h3>
+                    <div class="card-content">
+                        <p>Popular libraries and frameworks that power modern AI development.</p>
+                        <ul class="resources-list">
+                            <li>TensorFlow - Google's end-to-end ML platform</li>
+                            <li>PyTorch - Facebook's flexible deep learning framework</li>
+                            <li>Hugging Face - State-of-the-art NLP models and tools</li>
+                            <li>scikit-learn - Machine learning in Python</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="card-link">Explore Libraries</a>
+                </div>
+                
+                <div class="card resources-card">
+                    <div class="resources-icon">🔬</div>
+                    <h3 class="card-title">Research Papers & Journals</h3>
+                    <div class="card-content">
+                        <p>Stay updated with the latest AI research and breakthroughs.</p>
+                        <ul class="resources-list">
+                            <li>arXiv - Open repository of electronic preprints</li>
+                            <li>Papers With Code - ML papers with implementations</li>
+                            <li>Journal of Machine Learning Research</li>
+                            <li>Conference proceedings (NeurIPS, ICML, ICLR)</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="card-link">Browse Research</a>
+                </div>
+                
+                <div class="card resources-card">
+                    <div class="resources-icon">🛠️</div>
+                    <h3 class="card-title">Development Tools</h3>
+                    <div class="card-content">
+                        <p>Tools that enhance productivity and efficiency in AI development.</p>
+                        <ul class="resources-list">
+                            <li>Jupyter Notebooks - Interactive computing environment</li>
+                            <li>Visual Studio Code with Python extensions</li>
+                            <li>Google Colab - Free cloud-based notebook platform</li>
+                            <li>Weights & Biases - Experiment tracking for ML</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="card-link">View Tools</a>
+                </div>
+                
+                <div class="card resources-card">
+                    <div class="resources-icon">🌐</div>
+                    <h3 class="card-title">Community & Forums</h3>
+                    <div class="card-content">
+                        <p>Connect with fellow AI enthusiasts and experts to share knowledge.</p>
+                        <ul class="resources-list">
+                            <li>Stack Overflow - Technical Q&A for developers</li>
+                            <li>Reddit communities (r/MachineLearning, r/datascience)</li>
+                            <li>AI-focused Discord servers and Slack channels</li>
+                            <li>Twitter/X ML community and tech leaders</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="card-link">Join Communities</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="team">
+        <div class="container">
+            <h2 class="section-title">Our Team</h2>
+            <p class="section-description">We are researchers, engineers, and AI enthusiasts passionate about advancing the field and sharing knowledge with the community.</p>
+            
+            <div class="team-grid">
+                <div class="card team-card">
+                    <div class="avatar">P</div>
+                    <h3 class="team-name">Person One</h3>
+                    <p class="team-title">AI Research Engineer</p>
+                    <p>Specializing in natural language processing and large language models with a background in computational linguistics.</p>
+                    <div class="social-links">
+                        <a href="#">L</a>
+                        <a href="#">G</a>
+                        <a href="#">T</a>
+                    </div>
+                </div>
+                
+                <div class="card team-card">
+                    <div class="avatar">P</div>
+                    <h3 class="team-name">Person Two</h3>
+                    <p class="team-title">ML Systems Architect</p>
+                    <p>Expert in designing and implementing scalable machine learning systems with a focus on efficiency and performance.</p>
+                    <div class="social-links">
+                        <a href="#">L</a>
+                        <a href="#">G</a>
+                        <a href="#">T</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">Get in Touch</h2>
+            <p class="section-description">Have questions or want to collaborate? Reach out to us using the form below.</p>
+            
+            <div class="contact-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" placeholder="Your name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Your email address">
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" placeholder="Your message"></textarea>
+                </div>
+                
+                <button class="btn btn-primary">Send Message</button>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-about">
+                    <div class="footer-logo">AI Nexus</div>
+                    <p class="footer-text">Exploring the frontiers of artificial intelligence and sharing knowledge with the global community.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                                <li><a href="#latest-articles">Latest Articles</a></li>
+                        <li><a href="#ai-projects">Our AI Projects</a></li>
+                        <li><a href="#learning-paths">Learning Paths</a></li>
+                        <li><a href="#useful-resources">Useful Resources</a></li>
+                        <li><a href="#team">Our Team</a></li>
+                        <li><a href="#contact">Get In Touch</a></li>
